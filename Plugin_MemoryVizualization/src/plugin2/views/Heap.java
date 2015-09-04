@@ -115,6 +115,7 @@ public class Heap extends ViewPart{
 		for (TreeItem item : treeInstance.getItems()){item.dispose();}
 		
 		List<ReferenceType> AllMyClasses = GetAllMyClasses(JVM);
+		AllMyClasses = sortByHashCode(AllMyClasses);
 		for(ReferenceType Class : AllMyClasses){
 			VizualizateClass(Class);
 			List<ObjectReference> Instances = Class.instances(0);
@@ -162,7 +163,7 @@ public class Heap extends ViewPart{
 			for (ReferenceType ParentClass : ParentClasses){if (ParentClass.equals(Type)){isExist = true;}}
 			if (!isExist){ParentClasses.add(Type);}
 		}		
-		ParentClasses = SortByHashCode(ParentClasses);
+		ParentClasses = sortByHashCodePlusReplaceFirst(ParentClasses);
 		
 		for (ReferenceType ParentClass : ParentClasses){
 			
@@ -195,7 +196,24 @@ public class Heap extends ViewPart{
 		}		
 	}
 	
-	private List<ReferenceType> SortByHashCode (List<ReferenceType>  ParentClasses){
+	private List<ReferenceType> sortByHashCode (List<ReferenceType>  ParentClasses){
+		if (ParentClasses==null){return null;}
+		if (ParentClasses.size()<2){return ParentClasses;}
+		
+		for (int i = 0; i < ParentClasses.size(); i++){
+			
+			for (int k = i; k<ParentClasses.size(); k++){
+				if (ParentClasses.get(k).hashCode()<ParentClasses.get(i).hashCode()){
+					ReferenceType temp = ParentClasses.get(i);
+					ParentClasses.set(i, ParentClasses.get(k));
+					ParentClasses.set(k, temp);					
+				}
+			}
+		}
+		return ParentClasses;
+	}
+	
+	private List<ReferenceType> sortByHashCodePlusReplaceFirst (List<ReferenceType>  ParentClasses){
 		if (ParentClasses==null){return null;}
 		if (ParentClasses.size()<2){return ParentClasses;}
 		
