@@ -83,7 +83,7 @@ public class Stack extends ViewPart {
 	public void VizualizateStack(){		
 		if (debugEventSetListener == null){return;}
 		if (!debugEventSetListener.isItIsNewBreakpointHit_Stack()){return;}
-		 
+		System.out.println("NewHit = yes!!!"); 
 		IJavaThread CurrentThread =  debugEventSetListener.getCurrentThread_Stack();	
 		IStackFrame[] Frames = debugEventSetListener.GetStackFrames(CurrentThread);		
 		
@@ -97,20 +97,25 @@ public class Stack extends ViewPart {
 			
 			TreeItem item = new TreeItem(tree, SWT.LEFT);
 			item.setText(0, FrameName);	
-			
-
-			
+					
 			TreeItem subItem;
 			
 			subItem = new TreeItem(item, SWT.LEFT);
 			int lineNumber = debugEventSetListener.GetStackFrameLineNumber(frame);
 			subItem.setText(0, "line number : " + lineNumber);
+	
+			subItem = new TreeItem(item, SWT.LEFT);
+			subItem.setText(0, "StackPointer : ");				
+			
+			subItem = new TreeItem(item, SWT.LEFT);
+			subItem.setText(0, "ReturnAddress : ");			
 		
 			IVariable[] variables = GetStackFrameVariables(frame);
 			if (variables != null){
 				for (IVariable variable : variables){
 					String valueString = "";
 					String referenceTypeName = "";
+					
 					try {valueString =  variable.getValue().toString();} catch (DebugException e) {}
 					if (valueString.contains("id")){try {valueString = "@"+variable.getValue().hashCode();} catch (DebugException e) {}}
 					try {if (variable.getReferenceTypeName().equals("java.lang.String") ){valueString = "@"+variable.getValue().hashCode();}} catch (DebugException e) {}
@@ -118,7 +123,8 @@ public class Stack extends ViewPart {
 					
 					subItem = new TreeItem(item, SWT.LEFT);
 					try {subItem.setText(0, variable.getReferenceTypeName());} catch (DebugException e) {}
-					subItem.setText(0,referenceTypeName + " " + variable.toString() + " : " + valueString);							
+					subItem.setText(0,referenceTypeName + " " + variable.toString() + " : " + valueString);	
+									
 				}
 			}
 		}

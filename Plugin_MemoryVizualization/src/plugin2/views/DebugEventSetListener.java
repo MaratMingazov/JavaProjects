@@ -7,6 +7,8 @@ import org.eclipse.debug.core.IDebugEventSetListener;
 import org.eclipse.debug.core.model.IStackFrame;
 import org.eclipse.jdt.debug.core.IJavaThread;
 
+//import org.eclipse
+
 public class DebugEventSetListener implements IDebugEventSetListener {
 
 	private IJavaThread currentThread = null; 
@@ -30,6 +32,7 @@ public class DebugEventSetListener implements IDebugEventSetListener {
 	public void handleDebugEvents(DebugEvent[] events) {
 		IJavaThread thread = null;
 		for (DebugEvent event : events){
+			System.out.println("Thread = " + event.getSource());
 			if (event.getSource() instanceof IJavaThread){thread = (IJavaThread) event.getSource();}
 		}		
 		if (thread != null){

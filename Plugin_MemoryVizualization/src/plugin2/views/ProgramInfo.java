@@ -74,8 +74,14 @@ public class ProgramInfo extends ViewPart {
 		
 		String frameName = debugEventSetListener.GetStackFrameName(topFrame);
 		int lineNumber = debugEventSetListener.GetStackFrameLineNumber(topFrame);
+		
 		TreeItem item = new TreeItem(tree, SWT.LEFT);
 		item.setText(0, "ProgramCounter : " + frameName + " " + lineNumber);	
+
+		TreeItem item2 = new TreeItem(tree, SWT.LEFT);
+		item2.setText(0, "StackPointer : ");	
+		
+		
 	}
 	
 }
