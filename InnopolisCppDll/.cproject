@@ -34,7 +34,7 @@
 									<listOptionValue builtIn="false" value="&quot;C:\Program Files\Java\jdk1.8.0_51\include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;C:\Program Files\Java\jdk1.8.0_51\include\win32&quot;"/>
 								</option>
-								<option id="gnu.cpp.compiler.option.include.files.2121554440" superClass="gnu.cpp.compiler.option.include.files" valueType="includeFiles">
+								<option id="gnu.cpp.compiler.option.include.files.2121554440" name="Include files (-include)" superClass="gnu.cpp.compiler.option.include.files" valueType="includeFiles">
 									<listOptionValue builtIn="false" value="&quot;C:\Users\User\Desktop\1\lips_aj_jni_Callbacks.h&quot;"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.1037445369" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
@@ -56,6 +56,12 @@
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.cpp.linker.mingw.so.debug.1947692856" name="MinGW C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.mingw.so.debug">
 								<option defaultValue="true" id="gnu.cpp.link.mingw.so.debug.option.shared.592511025" name="Shared (-shared)" superClass="gnu.cpp.link.mingw.so.debug.option.shared" valueType="boolean"/>
+								<option id="gnu.cpp.link.option.paths.1001265574" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" valueType="libPaths">
+									<listOptionValue builtIn="false" value="&quot;C:\Program Files\Java\jdk1.8.0_51\lib&quot;"/>
+								</option>
+								<option id="gnu.cpp.link.option.userobjs.11359165" name="Other objects" superClass="gnu.cpp.link.option.userobjs" valueType="userObjs">
+									<listOptionValue builtIn="false" value="&quot;C:\Program Files\Java\jdk1.8.0_51\lib\jvm.lib&quot;"/>
+								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.1664450248" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
 									<additionalInput kind="additionalinput" paths="$(LIBS)"/>
