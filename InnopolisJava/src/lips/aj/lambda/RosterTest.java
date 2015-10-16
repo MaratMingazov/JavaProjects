@@ -46,6 +46,7 @@ public class RosterTest {
     interface CheckPerson {
         boolean test(Person p);
     }
+    
 
     // Approach 1: Create Methods that Search for Persons that Match One
     // Characteristic
