@@ -5,6 +5,8 @@
 		<accessrules>
 			<accessrule kind="accessible" pattern="com/sun/jdi/**"/>
 			<accessrule kind="accessible" pattern="org/eclipse/jdt/internal/debug/core/model/JDIDebugTarget"/>
+			<accessrule kind="accessible" pattern="org/eclipse/cdt/launch/internal/LocalCDILaunchDelegate"/>
+			<accessrule kind="accessible" pattern="org/eclipse/cdt/launch/internal/ui/LaunchUIPlugin"/>
 		</accessrules>
 	</classpathentry>
 	<classpathentry kind="src" path="src"/>

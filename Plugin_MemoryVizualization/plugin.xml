@@ -48,5 +48,37 @@
             file="contexts.xml">
       </contexts>
    </extension>
+   <extension
+         id="plugin2.views.CDebugger"
+         point="org.eclipse.cdt.debug.core.CDebugger">
+      <debugger
+            class="plugin2.views.CDIDebugger"
+            cpu="*"
+            id="plugin2.views.CDIDebugger"
+            modes="run,core,attach"
+            name="CDebugger"
+            platform="*">
+      </debugger>
+   </extension>
+   <extension
+         point="org.eclipse.debug.core.launchConfigurationTypes">
+      <launchConfigurationType
+            delegate="plugin2.views.ConfigurationDelegate"
+            id="Plugin_MemoryVizualization.launchConfigurationType"
+            modes="debug"
+            name="Lips C/C++ configuration tab"
+            public="true"
+            sourceLocatorId="org.eclipse.cdt.debug.core.sourceLocator"
+            sourcePathComputerId="org.eclipse.cdt.debug.core.sourcePathComputer">
+      </launchConfigurationType>
+   </extension>
+   <extension
+         point="org.eclipse.debug.ui.launchConfigurationTabGroups">
+      <launchConfigurationTabGroup
+            class="plugin2.views.ExampleTabGroup"
+            id="Plugin_MemoryVizualization.LipsTypeGroup"
+            type="Plugin_MemoryVizualization.launchConfigurationType">
+      </launchConfigurationTabGroup>
+   </extension>
 
 </plugin>

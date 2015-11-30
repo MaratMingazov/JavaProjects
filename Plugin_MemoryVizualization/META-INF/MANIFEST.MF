@@ -5,11 +5,29 @@ Bundle-SymbolicName: Plugin_MemoryVizualization;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: plugin2.Activator
 Require-Bundle: org.eclipse.ui,
- org.eclipse.core.runtime
+ org.eclipse.core.runtime,
+ org.eclipse.cdt.core;bundle-version="5.11.0",
+ org.eclipse.cdt.debug.core;bundle-version="7.7.0",
+ org.eclipse.debug.core;bundle-version="3.10.0",
+ org.eclipse.debug.ui;bundle-version="3.11.100",
+ org.eclipse.cdt.launch;bundle-version="7.3.0"
 Bundle-ActivationPolicy: lazy
 Import-Package: com.sun.jdi,
  com.sun.jdi.connect,
  com.sun.jdi.connect.spi,
+ com.sun.jdi.event,
+ org.eclipse.cdt.debug.core,
+ org.eclipse.cdt.debug.core.cdi,
+ org.eclipse.cdt.debug.core.cdi.event,
+ org.eclipse.cdt.debug.core.cdi.model,
+ org.eclipse.cdt.debug.mi.core,
+ org.eclipse.cdt.debug.mi.core.cdi,
+ org.eclipse.cdt.debug.mi.core.cdi.model,
+ org.eclipse.cdt.debug.mi.core.command,
+ org.eclipse.cdt.debug.mi.core.command.factories,
+ org.eclipse.cdt.debug.mi.core.output,
+ org.eclipse.cdt.dsf.gdb.launching,
+ org.eclipse.core.variables,
  org.eclipse.debug.core,
  org.eclipse.debug.core.model,
  org.eclipse.draw2d,
