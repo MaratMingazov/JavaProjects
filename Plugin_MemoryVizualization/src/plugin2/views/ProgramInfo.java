@@ -19,7 +19,6 @@ import org.eclipse.ui.part.ViewPart;
 
 public class ProgramInfo extends ViewPart {
 
-	private DebugEventListener jdiEventListener = null;
 	private CDIEventListener cdiEventListener = null;
 	private Session cdiDebugSession = null;
 	private Tree tree;
@@ -28,7 +27,7 @@ public class ProgramInfo extends ViewPart {
 		public void run() {
 			while (true) {
 				try { Thread.sleep(1000); } catch (Exception e) { }
-				Runnable task = () -> { vizualizateProgramInfoJava();vizualizateProgramInfoCpp();};
+				Runnable task = () -> {vizualizateProgramInfoCpp();};
 				Display.getDefault().asyncExec(task);
 			}			
 		}
@@ -49,8 +48,6 @@ public class ProgramInfo extends ViewPart {
 		columnName.setText("");
 		columnName.setWidth(300);
 		
-		jdiEventListener = new DebugEventListener();
-		DebugPlugin.getDefault().addDebugEventListener(jdiEventListener);
 		
 		this.cdiEventListener		= new CDIEventListener();
 		tryGetCdiSession();
@@ -74,28 +71,6 @@ public class ProgramInfo extends ViewPart {
 	public void setFocus() {
 	}
 
-	public void vizualizateProgramInfoJava(){	
-		if(jdiEventListener == null){return;}		
-		if (!jdiEventListener.isItUpdatedThread()){return;}
-
-		IJavaThread CurrentThread =  jdiEventListener.getCurrentThread();	
-		IStackFrame topFrame = DebugEventListener.getTopStackFrame(CurrentThread);		
-		
-		if (topFrame == null){return;}
-		
-		for (TreeItem item : tree.getItems()){item.dispose();}
-				
-		String frameName = DebugEventListener.getStackFrameName(topFrame);
-		int lineNumber = DebugEventListener.getStackFrameLineNumber(topFrame);
-		
-		TreeItem item = new TreeItem(tree, SWT.LEFT);
-		item.setText(0, "ProgramCounter : " + frameName + " " + lineNumber);	
-
-		TreeItem item2 = new TreeItem(tree, SWT.LEFT);
-		item2.setText(0, "StackPointer : ");	
-		
-		
-	}
 	
 	public void vizualizateProgramInfoCpp(){
 		tryGetCdiSession();

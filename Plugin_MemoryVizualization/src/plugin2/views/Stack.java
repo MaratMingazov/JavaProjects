@@ -40,7 +40,7 @@ import org.eclipse.jdt.debug.core.IJavaThread;
 
 public class Stack extends ViewPart {
 
-	private DebugEventListener jdiEventListener = null;
+
 	private CDIEventListener cdiEventListener = null;
 	private Session cdiDebugSession = null;
 	private Tree tree = null;
@@ -49,7 +49,7 @@ public class Stack extends ViewPart {
 		public void run() {
 			while (true) {
 				try { Thread.sleep(1000); } catch (Exception e) { }
-				Runnable task = () -> { VizualizateStackJava(); VizualizateStack—pp();};
+				Runnable task = () -> { VizualizateStack—pp();};
 				Display.getDefault().asyncExec(task);
 			}			
 		}
@@ -59,9 +59,6 @@ public class Stack extends ViewPart {
 		
 		createTree(parent);
 		
-		this.jdiEventListener = new DebugEventListener();
-		DebugPlugin.getDefault().addDebugEventListener(this.jdiEventListener);
-		//JDIDebugModel.addJavaBreakpointListener(this);
 		
 		this.cdiEventListener		= new CDIEventListener();
 		tryGetCdiSession();
@@ -97,55 +94,6 @@ public class Stack extends ViewPart {
 			if (this.cdiDebugSession != null){this.cdiDebugSession.getEventManager().addEventListener(this.cdiEventListener);}	
 		}
 	}
-	
-	private void VizualizateStackJava(){		
-		if(jdiEventListener == null){return;}
-		if (!jdiEventListener.isItUpdatedThread()){return;}
-
-		IJavaThread CurrentThread =  jdiEventListener.getCurrentThread();	
-		IStackFrame[] Frames = DebugEventListener.getStackFrames(CurrentThread);		
-		
-		if (Frames == null){return;}
-		for (TreeItem item : tree.getItems()){item.dispose();}
-	
-		for (int i = 0; i< Frames.length; i++){
-
-			IStackFrame frame = Frames[i];
-			String FrameName = DebugEventListener.getStackFrameName(frame);
-			
-			TreeItem item = new TreeItem(tree, SWT.LEFT);
-			item.setText(0, FrameName);	
-					
-			TreeItem subItem;
-			
-			subItem = new TreeItem(item, SWT.LEFT);
-			int lineNumber = DebugEventListener.getStackFrameLineNumber(frame);
-			subItem.setText(0, "line number : " + lineNumber);
-	
-			subItem = new TreeItem(item, SWT.LEFT);
-			subItem.setText(0, "StackPointer : ");				
-			
-			subItem = new TreeItem(item, SWT.LEFT);
-			subItem.setText(0, "ReturnAddress : ");			
-		
-			IVariable[] variables = DebugEventListener.getStackFrameVariables(frame);
-			if (variables != null){
-				for (IVariable variable : variables){
-					String valueString = "";
-					String referenceTypeName = "";
-					
-					try {valueString =  variable.getValue().toString();} catch (DebugException e) {}
-					if (valueString.contains("id")){try {valueString = "@"+variable.getValue().hashCode();} catch (DebugException e) {}}
-					try {if (variable.getReferenceTypeName().equals("java.lang.String") ){valueString = "@"+variable.getValue().hashCode();}} catch (DebugException e) {}
-					try {referenceTypeName = variable.getReferenceTypeName();} catch (DebugException e) {}
-					
-					subItem = new TreeItem(item, SWT.LEFT);
-					try {subItem.setText(0, variable.getReferenceTypeName());} catch (DebugException e) {}
-					subItem.setText(0,referenceTypeName + " " + variable.toString() + " : " + valueString);					
-				}
-			}
-		}
-	}	
 	
 	private void VizualizateStack—pp(){		
 		tryGetCdiSession();
