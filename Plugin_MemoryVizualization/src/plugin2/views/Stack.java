@@ -8,11 +8,13 @@ package plugin2.views;
 
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.swt.widgets.TreeColumn;
 import org.eclipse.ui.part.*;
 import org.eclipse.swt.SWT;
+
 
 import java.util.ArrayList;
 
@@ -56,6 +58,10 @@ public class Stack extends ViewPart {
 	}
 	
 	public void createPartControl(Composite parent) {
+
+		//parent.setLayout(new GridLayout(2, false));
+	   // Text text1 = new Text(parent, SWT.NONE);
+	   // Text text2 = new Text(parent, SWT.NONE );
 		
 		createTree(parent);
 		
@@ -68,6 +74,7 @@ public class Stack extends ViewPart {
 		Runnable runnable = new RunnableForThread2();
 		Thread Thread2 = new Thread(runnable);
 		Thread2.start();
+		System.out.println("go");
 	}
 
 	@Override
@@ -105,26 +112,82 @@ public class Stack extends ViewPart {
 		
 		for (TreeItem item : tree.getItems()){item.dispose();}
 	
-	
-			//subItem = new TreeItem(item, SWT.LEFT);
-			//int lineNumber = frame.getLocator().getLineNumber();
-			//subItem.setText(0, "line number : " + lineNumber);
-	
-			//subItem = new TreeItem(item, SWT.LEFT);
-			//subItem.setText(0, "StackPointer : ");				
+		for (int i = 0; i< Frames.length; i++){
+
 			
-			//subItem = new TreeItem(item, SWT.LEFT);
-			//subItem.setText(0, "ReturnAddress : ");			
+			ICDIStackFrame frame = Frames[i];
+			String FrameName 	= frame.getLocator().getFunction();
+			String Location		= frame.getLocator().getFile();
+
+			TreeItem item = new TreeItem(tree, SWT.LEFT);
+			item.setText(0, Location + " " + FrameName);			
+			
+			TreeItem subItem;
+			
+			ICDIValue registerInstructionPointer = CDIEventListener.findRegisterValueByQualifiedName(frame, "$rip");
+			String registerInstructionPointerString = CDIEventListener.getValueString(registerInstructionPointer);		
+			subItem = new TreeItem(item, SWT.LEFT);
+			subItem.setText(0, "InstructionPointer : " + registerInstructionPointerString);			
+			
+			ICDIValue registerBasePointer = CDIEventListener.findRegisterValueByQualifiedName(frame, "$rbp");
+			String registerBasePointerString = CDIEventListener.getValueString(registerBasePointer);		
+			subItem = new TreeItem(item, SWT.LEFT);
+			subItem.setText(0, "BasePointer : " + registerBasePointerString);	
+	
+			
+			
+			ICDIValue registerStackPointer = CDIEventListener.findRegisterValueByQualifiedName(frame, "$rsp");
+			String registerStackPointerString = CDIEventListener.getValueString(registerStackPointer);		
 		
-			//ICDILocalVariableDescriptor[] descriptors = CDIEventListener.GetStackFrameLocalVariableDescriptors(frame);
-			/*if (descriptors != null){
-				ICDIVariable[] lvariables = new ICDIVariable[descriptors.length];
-				for (int k = 0; k<descriptors.length; k++){
-					lvariables[k] = CDIEventListener.getLocalVariable(descriptors[k]);
-				}
-				vizualizateCdiVariables(item, lvariables);
-			}*/
+			ArrayList<ICDIVariable> varlist = new ArrayList<ICDIVariable>();
+			ICDILocalVariableDescriptor[] descriptors = CDIEventListener.GetStackFrameLocalVariableDescriptors(frame);
+			ICDIVariable[] variables = new ICDIVariable[descriptors.length];
+			for (int k = 0; k<descriptors.length; k++){variables[k] = CDIEventListener.getLocalVariable(descriptors[k]);}
+			fillVarList(varlist, variables);
+			
+			for (ICDIVariable cdiVariable : varlist){
+				Variable variable = (Variable)cdiVariable;
+					
+				ICDIValue value 			= CDIEventListener.getLocalVariableValue(variable);
+				String valuestring			= CDIEventListener.getValueString(value);
+				String QualifiedName		= CDIEventListener.getQualifiedName(variable);
+				String hexAddress = CDIEventListener.getHexAddress(variable);
+				
+				if (hexAddress.compareTo(registerStackPointerString) >=0  && hexAddress.compareTo(registerBasePointerString) <=0 ){
+					subItem = new TreeItem(item, SWT.LEFT);
+					subItem.setText(0, hexAddress + " : " + valuestring + " (" + QualifiedName + ")");	
+				}		
+			}
+	
+			ICDIValue eax = CDIEventListener.findRegisterValueByQualifiedName(frame, "$eax");
+			String eaxString = CDIEventListener.getValueString(eax);		
+			subItem = new TreeItem(item, SWT.LEFT);
+			subItem.setText(0, "Return value : " + eaxString);				
+			
+			subItem = new TreeItem(item, SWT.LEFT);
+			subItem.setText(0, "StackPointer : " + registerStackPointerString);				
+		}
 	}	
+	
+	private boolean isExist(ArrayList<ICDIVariable> varlist, ICDIVariable variable){
+		Variable v = (Variable)variable;
+		String hexAddress1 = CDIEventListener.getHexAddress(v);
+		for (ICDIVariable var : varlist){
+			Variable variab = (Variable)var;
+			String hexAddress2 = CDIEventListener.getHexAddress(variab);
+			if (hexAddress1.equals(hexAddress2)){return true;}	
+		}
+		return false;
+	}
+	
+	private void fillVarList(ArrayList<ICDIVariable> varlist, ICDIVariable[] variables){		
+		for (ICDIVariable variable : variables){
+			if (!isExist(varlist, variable)){varlist.add(variable);}
+			ICDIValue value 			= CDIEventListener.getLocalVariableValue(variable);
+			ICDIVariable[] subvariables = CDIEventListener.getLocalVariablesFromValue(value);
+			fillVarList(varlist, subvariables);
+		}
+	}
 	
 	private void vizualizateCdiVariables(TreeItem item, ICDIVariable[] variables){
 		if (variables == null){return;}

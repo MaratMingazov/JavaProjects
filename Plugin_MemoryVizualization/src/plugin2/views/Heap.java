@@ -5,6 +5,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
 import org.eclipse.swt.widgets.TreeItem;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.ui.part.ViewPart;
 import com.sun.jdi.Field;
 import com.sun.jdi.Method;
@@ -40,7 +41,7 @@ public class Heap extends ViewPart{
 		public void run() {
 			while (true) {
 				try { Thread.sleep(1000); } catch (Exception e) { }
-				Runnable task = () -> {VizualizateHeapCpp();};
+				Runnable task = () -> { VizualizateHeapCpp();};
 				Display.getDefault().asyncExec(task);
 			}			
 		}
@@ -112,52 +113,31 @@ public class Heap extends ViewPart{
 		
 		for (int i = 0; i< Frames.length; i++){
 
-					
+			
 			ICDIStackFrame frame = Frames[i];
-			String FrameName 	= frame.getLocator().getFunction();
-			String Location		= frame.getLocator().getFile();
+			//String FrameName 	= frame.getLocator().getFunction();
+			//String Location		= frame.getLocator().getFile();
 
-			TreeItem item = new TreeItem(treeOne, SWT.LEFT);
-			item.setText(0, Location + " " + FrameName);	
-				
-			
-			try {
-				ICDIExpression[] expres = frame.getTarget().getExpressions();
-				System.out.println("expressions count = " + expres.length);
-				for (ICDIExpression ex : expres){
-					System.out.println("  text = " + ex.getExpressionText());
-					ICDIValue value = ex.getValue(frame);
-					String s = CDIEventListener.getValueString(value);
-					System.out.println("  valuestring = " + s);
-					
-				}
-			} catch (CDIException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-			
+			//TreeItem item = new TreeItem(treeOne, SWT.LEFT);
+			//item.setText(0, Location + " " + FrameName);			
 			
 			TreeItem subItem;
 			
-			ICDIValue registerInstructionPointer = CDIEventListener.findRegisterValueByQualifiedName(frame, "$rip");
-			String registerInstructionPointerString = CDIEventListener.getValueString(registerInstructionPointer);		
-			subItem = new TreeItem(item, SWT.LEFT);
-			subItem.setText(0, "InstructionPointer : " + registerInstructionPointerString);			
+			//ICDIValue registerInstructionPointer = CDIEventListener.findRegisterValueByQualifiedName(frame, "$rip");
+			//String registerInstructionPointerString = CDIEventListener.getValueString(registerInstructionPointer);		
+			//subItem = new TreeItem(item, SWT.LEFT);
+			//subItem.setText(0, "InstructionPointer : " + registerInstructionPointerString);			
 			
 			ICDIValue registerBasePointer = CDIEventListener.findRegisterValueByQualifiedName(frame, "$rbp");
 			String registerBasePointerString = CDIEventListener.getValueString(registerBasePointer);		
-			subItem = new TreeItem(item, SWT.LEFT);
-			subItem.setText(0, "BasePointer : " + registerBasePointerString);	
+			//subItem = new TreeItem(item, SWT.LEFT);
+			//subItem.setText(0, "BasePointer : " + registerBasePointerString);	
 	
 			
 			
 			ICDIValue registerStackPointer = CDIEventListener.findRegisterValueByQualifiedName(frame, "$rsp");
 			String registerStackPointerString = CDIEventListener.getValueString(registerStackPointer);		
 		
-			
-			
-			
 			ArrayList<ICDIVariable> varlist = new ArrayList<ICDIVariable>();
 			ICDILocalVariableDescriptor[] descriptors = CDIEventListener.GetStackFrameLocalVariableDescriptors(frame);
 			ICDIVariable[] variables = new ICDIVariable[descriptors.length];
@@ -171,24 +151,25 @@ public class Heap extends ViewPart{
 				String valuestring			= CDIEventListener.getValueString(value);
 				String QualifiedName		= CDIEventListener.getQualifiedName(variable);
 				String hexAddress = CDIEventListener.getHexAddress(variable);
+				if (hexAddress.isEmpty()){continue;}
 				
 				if (hexAddress.compareTo(registerStackPointerString) >=0  && hexAddress.compareTo(registerBasePointerString) <=0 ){
-					subItem = new TreeItem(item, SWT.LEFT);
-					subItem.setText(0, hexAddress + " : " + valuestring + " (" + QualifiedName + ")");	
+					//subItem = new TreeItem(item, SWT.LEFT);
+					//subItem.setText(0, hexAddress + " : " + valuestring + " (" + QualifiedName + ")");	
 				}else{
-					subItem = new TreeItem(treeTwo, SWT.LEFT);
+					subItem = new TreeItem(treeOne, SWT.LEFT);
 					subItem.setText(0, hexAddress + " : " + valuestring + " (" + QualifiedName + ")");	
 				}
 					
 			}
 	
-			ICDIValue eax = CDIEventListener.findRegisterValueByQualifiedName(frame, "$eax");
-			String eaxString = CDIEventListener.getValueString(eax);		
-			subItem = new TreeItem(item, SWT.LEFT);
-			subItem.setText(0, "Return value : " + eaxString);				
+			//ICDIValue eax = CDIEventListener.findRegisterValueByQualifiedName(frame, "$eax");
+			//String eaxString = CDIEventListener.getValueString(eax);		
+			//subItem = new TreeItem(item, SWT.LEFT);
+			//subItem.setText(0, "Return value : " + eaxString);				
 			
-			subItem = new TreeItem(item, SWT.LEFT);
-			subItem.setText(0, "StackPointer : " + registerStackPointerString);				
+			//subItem = new TreeItem(item, SWT.LEFT);
+			//subItem.setText(0, "StackPointer : " + registerStackPointerString);				
 
 		}
 		
