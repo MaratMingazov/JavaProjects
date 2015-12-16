@@ -64,6 +64,53 @@ public class CDIEventListener implements ICDIEventListener{
 		return itIsUpdatedThread;
 	}
 	
+	public ActivationRecord[] getActivationRecords() {
+		ICDIStackFrame[] frames = CDIEventListener.getStackFrames(getCurrentThread());
+		ActivationRecord[] records = new ActivationRecord[frames.length];
+
+		for (int i = 0; i < frames.length; i++) {
+			
+			ICDILocalVariableDescriptor[] descriptors =
+					CDIEventListener.GetStackFrameLocalVariableDescriptors(frames[i]);
+			VarDescription[] vars = new VarDescription[descriptors.length + 1];//extra space for return value
+			for (int k = 0; k < descriptors.length; k++) {
+				
+				vars[k] = new VarDescription(
+						CDIEventListener.getHexAddress(
+								(Variable) CDIEventListener.getLocalVariable(descriptors[k])),
+						CDIEventListener.getLocalVariableTypeName(
+								CDIEventListener.getLocalVariable(descriptors[k])),
+						CDIEventListener.getValueString(CDIEventListener.getLocalVariableValue(
+										CDIEventListener.getLocalVariable(descriptors[k]))),
+						CDIEventListener.getQualifiedName(
+								CDIEventListener.getLocalVariable(descriptors[k]))
+				);
+			}
+			
+			ICDIValue retVal = CDIEventListener.findRegisterValueByQualifiedName(frames[i], "$eax");
+			
+			VarDescription returnValue = new VarDescription(
+					CDIEventListener.getHexAddress((Variable) retVal),
+					CDIEventListener.getLocalVariableTypeName((Variable) retVal),
+					CDIEventListener.getValueString(retVal),
+					CDIEventListener.getQualifiedName((Variable) retVal)
+			);
+			vars[vars.length - 1] = returnValue;
+			
+			records[i] = new ActivationRecord(
+					
+					frames[i].getLocator().getFunction(),
+					frames[i].getLocator().getFile(),
+					CDIEventListener.getValueString(
+							CDIEventListener.findRegisterValueByQualifiedName(frames[i], "$rbp")),
+					CDIEventListener.getValueString(
+							CDIEventListener.findRegisterValueByQualifiedName(frames[i], "$rsp")),
+					vars
+			);
+		}
+		return records;
+	}
+	
 	public static ICDIStackFrame[] getStackFrames(ICDIThread thread){
 		if (thread == null){return null;}
 		ICDIStackFrame[] Frames = new ICDIStackFrame[0];
@@ -155,31 +202,51 @@ public class CDIEventListener implements ICDIEventListener{
 	
 	public static String getHexAddress (Variable variable){
 		String hexAddress = "";
-		try {hexAddress = variable.getHexAddress();} catch (CDIException e) {e.printStackTrace();}
+		try {
+			hexAddress = variable.getHexAddress();
+		} catch (CDIException e) {
+			e.printStackTrace();
+		}
 		return hexAddress;
 	}
 	
 	public static ICDIRegisterGroup[]  getICDIRegisterGroups (ICDIStackFrame frame){
 		ICDIRegisterGroup[] registerGroup = new ICDIRegisterGroup[0];
-		try {registerGroup = frame.getThread().getTarget().getRegisterGroups();} catch (CDIException e) {e.printStackTrace();}
+		try {
+			registerGroup = frame.getThread().getTarget().getRegisterGroups();
+		} catch (CDIException e) {
+			e.printStackTrace();
+		}
 		return registerGroup;
 	}
 	
 	public static ICDIRegisterDescriptor[] getICDIRegisterDescriptors(ICDIRegisterGroup registerGroup){
 		ICDIRegisterDescriptor[] regDescriptors = new ICDIRegisterDescriptor[0];
-		try {regDescriptors = registerGroup.getRegisterDescriptors();} catch (CDIException e) {e.printStackTrace();}
+		try {
+			regDescriptors = registerGroup.getRegisterDescriptors();
+		} catch (CDIException e) {
+			e.printStackTrace();
+		}
 		return regDescriptors;
 	}
 	
 	public static ICDIRegister createICDIRegister(ICDIStackFrame frame, ICDIRegisterDescriptor regDescriptor){
 		ICDIRegister register = null;
-		try {register = frame.getTarget().createRegister(regDescriptor);} catch (CDIException e) {e.printStackTrace();}
+		try {
+			register = frame.getTarget().createRegister(regDescriptor);
+		} catch (CDIException e) {
+			e.printStackTrace();
+		}
 		return register;
 	}
 	
 	public static ICDIValue getRegisterValue(ICDIStackFrame frame, ICDIRegister register){
 		ICDIValue value = null;
-		try {value = register.getValue(frame);} catch (CDIException e) {e.printStackTrace();}
+		try {
+			value = register.getValue(frame);
+		} catch (CDIException e) {
+			e.printStackTrace();
+		}
 		return value;
 	}
 	
@@ -198,9 +265,12 @@ public class CDIEventListener implements ICDIEventListener{
 	}
 	
 	public static ICDIInstruction[] getInstructions(ICDIStackFrame frame){
-		 ICDIInstruction[] instructions = new ICDIInstruction[0];
-		 try {instructions = frame.getTarget().getInstructions(frame.getLocator().getFile(), frame.getLocator().getLineNumber());}
-		 catch (CDIException e) {e.printStackTrace();}
-		 return instructions;
+		ICDIInstruction[] instructions = new ICDIInstruction[0];
+		try {
+			instructions = frame.getTarget().getInstructions(
+					frame.getLocator().getFile(), frame.getLocator().getLineNumber());
+		}
+		catch (CDIException e) {e.printStackTrace();}
+		return instructions;
 	}
 }
