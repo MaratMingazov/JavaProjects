@@ -5,15 +5,17 @@ public class ActivationRecord {
 	private String fileName;
 	private String startAddress;
 	private String endAddress;
+	private String returnValue;
 	private VarDescription[] vars;
 	
 	public ActivationRecord(String functionName, String fileName, String startAddress, String endAddress,
-			VarDescription[] vars) {
+			String returnValue,	VarDescription[] vars) {
 		super();
 		this.functionName = functionName;
 		this.fileName = fileName;
 		this.startAddress = startAddress;
 		this.endAddress = endAddress;
+		this.returnValue = returnValue;
 		this.vars = vars;
 	}
 	
@@ -41,6 +43,13 @@ public class ActivationRecord {
 	}
 	public void setEndAddress(String endAddress) {
 		this.endAddress = endAddress;
+	}
+	public String getReturnValue() {
+		return returnValue;
+	}
+
+	public void setReturnValue(String returnValue) {
+		this.returnValue = returnValue;
 	}
 	public VarDescription[] getVars() {
 		return vars;
