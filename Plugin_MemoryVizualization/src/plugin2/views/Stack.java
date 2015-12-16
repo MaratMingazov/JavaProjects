@@ -8,13 +8,27 @@ package plugin2.views;
 
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
-
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.swt.widgets.TreeColumn;
 import org.eclipse.ui.part.*;
-import org.eclipse.swt.SWT;
 
+import javafx.embed.swt.FXCanvas;
+import javafx.scene.Node;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
+
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.layout.GridLayout;
 
 import java.util.ArrayList;
 
@@ -39,7 +53,6 @@ import org.eclipse.jdt.debug.core.IJavaThread;
 
 
 
-
 public class Stack extends ViewPart {
 
 
@@ -59,23 +72,96 @@ public class Stack extends ViewPart {
 	
 	public void createPartControl(Composite parent) {
 
+
 		//parent.setLayout(new GridLayout(2, false));
 	   // Text text1 = new Text(parent, SWT.NONE);
 	   // Text text2 = new Text(parent, SWT.NONE );
 		
-		createTree(parent);
+	    AnchorPane p = new AnchorPane();
+
+
+	    CreateMemoryArea(10, 10, 100, 300, "Stack", p);
+	    CreateMemoryArea(120, 10, 300, 300, "Heap", p);
+	
+		/*
+	    HBox hbox = new HBox();
+		hbox.setTranslateX(10);
+		hbox.setTranslateY(10);
+		
+		Rectangle r = new Rectangle(20,20,50,50);
+		r.setFill(Color.WHITE);
+		r.setStroke(Color.BLACK);
+		r.setStrokeWidth(1);
+	
+		hbox.getChildren().add(r);
+		p.getChildren().add(hbox);
 		
 		
-		this.cdiEventListener		= new CDIEventListener();
-		tryGetCdiSession();
+		 hbox = new HBox();
+		hbox.setTranslateX(12);
+		hbox.setTranslateY(10);		
+		Text t1 = new Text();
+		t1.setText("main:");
+		hbox.getChildren().add(t1);
+		p.getChildren().add(hbox);	
+		*/
+	    Scene scene = new Scene(p);
+
+	   // parent.setLayout(new FillLayout());
+	   FXCanvas fxCanvas = new FXCanvas(parent, SWT.NONE);
+
+	    fxCanvas.setScene(scene);
+    
+	    
+	    //Scene s = new Scene
+	   // parent.setLayoutData(p);
+		//createTree(parent);
+		
+		
+		//this.cdiEventListener		= new CDIEventListener();
+		//tryGetCdiSession();
 		
 		
 		
-		Runnable runnable = new RunnableForThread2();
-		Thread Thread2 = new Thread(runnable);
-		Thread2.start();
-		System.out.println("go");
+		//Runnable runnable = new RunnableForThread2();
+		//Thread Thread2 = new Thread(runnable);
+		//Thread2.start();
+		//System.out.println("go");
 	}
+	
+	
+	private void CreateMemoryArea(int dX, int dY, int Width, int Height, String Name, Pane root){
+		CreateTextArea(dX, dY, Name, root);
+		createRectangleArea(dX, dY*3, Width, Height, root);
+	}	
+	
+	private void CreateTextArea(int TranslateX, int TranslateY, String setText, Pane root){
+
+		HBox hbox = new HBox();
+		hbox.setTranslateX(TranslateX);
+		hbox.setTranslateY(TranslateY);
+
+		Text t1 = new Text();
+		t1.setText(setText);
+		hbox.getChildren().add(t1);
+		root.getChildren().add(hbox);	
+	}	
+	
+	private void createRectangleArea(int dX, int dY, int width, int height, Pane root){
+		
+		HBox hbox = new HBox();
+		hbox.setTranslateX(dX);
+		hbox.setTranslateY(dY);
+		
+		Rectangle r = new Rectangle(0,0,width,height);
+		r.setFill(Color.WHITE);
+		r.setStroke(Color.BLACK);
+		r.setStrokeWidth(2);
+	
+		hbox.getChildren().add(r);
+		root.getChildren().add(hbox);
+	}
+	
 
 	@Override
 	public void setFocus() {
