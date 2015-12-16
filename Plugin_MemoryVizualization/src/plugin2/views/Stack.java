@@ -73,6 +73,13 @@ public class Stack extends ViewPart {
 	}
 	
 	public void createPartControl(Composite parent) {
+		this.cdiEventListener    = new CDIEventListener();
+	    tryGetCdiSession();
+	    
+	    Runnable runnable = new RunnableForThread2();
+	    Thread Thread2 = new Thread(runnable);
+	    Thread2.start();
+		
 		browser = new Browser(parent, SWT.NONE);
 		browser.setText("<html><body>Here will appear stack-related debug information</body></html>");
 	}
@@ -97,6 +104,8 @@ public class Stack extends ViewPart {
 		tryGetCdiSession();
 		if (cdiEventListener == null){return;}
 		if (!cdiEventListener.isItUpdatedThread()){return;}
+		
+		
 		
 		String tabContent = VisualizationUtils.composeStackTab(cdiEventListener.getActivationRecords());
 		browser.setText(tabContent);
