@@ -7,13 +7,10 @@ public class ActivationRecord {
 	private String endAddress;
 	private VarDescription[] vars;
 	private VarDescription[] args;
-	private String returnValue;
-	private String returnValueType;
-	
 
 
 	public ActivationRecord(String functionName, String fileName, String startAddress, String endAddress,
-			VarDescription[] vars, VarDescription[] args, String returnValue, String returnValueType) {
+			VarDescription[] vars, VarDescription[] args) {
 		super();
 		this.functionName = functionName;
 		this.fileName = fileName;
@@ -21,8 +18,6 @@ public class ActivationRecord {
 		this.endAddress = endAddress;
 		this.vars = vars;
 		this.args = args;
-		this.returnValue = returnValue;
-		this.returnValueType = returnValueType;
 	}
 	
 	// getters and setters
@@ -61,22 +56,6 @@ public class ActivationRecord {
 	}
 	public void setArgs(VarDescription[] args) {
 		this.args = args;
-	}
-
-	public String getReturnValue() {
-		return returnValue;
-	}
-
-	public void setReturnValue(String returnValue) {
-		this.returnValue = returnValue;
-	}
-
-	public String getReturnValueType() {
-		return returnValueType;
-	}
-
-	public void setReturnValueType(String returnValueType) {
-		this.returnValueType = returnValueType;
 	}
 	
 	

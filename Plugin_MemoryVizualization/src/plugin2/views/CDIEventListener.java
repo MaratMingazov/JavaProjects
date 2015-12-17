@@ -25,6 +25,9 @@ public class CDIEventListener implements ICDIEventListener{
 	private ICDIThread currentThread = null; 
 	private boolean itIsUpdatedThread = false;
 	
+	private String EAXvalue;
+	private String EAXvaluetype;
+	
 	public void handleDebugEvents(ICDIEvent[] event) {
 		//System.out.println("");
 		for (ICDIEvent ev : event){
@@ -118,14 +121,23 @@ public class CDIEventListener implements ICDIEventListener{
 			}
 			
 			ICDIValue registerReturnValue = CDIEventListener.findRegisterValueByQualifiedName(frames[i], "$eax");
-			String returnValue = CDIEventListener.getValueString(registerReturnValue);	
-			String returnValueTypeName = CDIEventListener.getValueTypeName(registerReturnValue);	
+			EAXvalue = CDIEventListener.getValueString(registerReturnValue);	
+			EAXvaluetype = CDIEventListener.getValueTypeName(registerReturnValue);	
 			
 
 			
-			records[i] = new ActivationRecord(functionname,filename,startaddress,endaddress,vars, args, returnValue, returnValueTypeName);
+			records[i] = new ActivationRecord(functionname,filename,startaddress,endaddress,vars, args);
 		}
+		setItIsUpdatedThread(false);
 		return records;
+	}
+	
+	public String getEaxValue(){
+		return EAXvalue;
+	}
+	
+	public String getEaxType(){
+		return EAXvaluetype;
 	}
 	
 	public static ICDIStackFrame[] getStackFrames(ICDIThread thread){
