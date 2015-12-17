@@ -116,9 +116,14 @@ public class CDIEventListener implements ICDIEventListener{
 				registerStackPointer = CDIEventListener.findRegisterValueByQualifiedName(frames[i], "$esp");
 				endaddress = CDIEventListener.getValueString(registerStackPointer);
 			}
+			
+			ICDIValue registerReturnValue = CDIEventListener.findRegisterValueByQualifiedName(frames[i], "$eax");
+			String returnValue = CDIEventListener.getValueString(registerReturnValue);	
+			String returnValueTypeName = CDIEventListener.getValueTypeName(registerReturnValue);	
+			
 
 			
-			records[i] = new ActivationRecord(functionname,filename,startaddress,endaddress,vars, args);
+			records[i] = new ActivationRecord(functionname,filename,startaddress,endaddress,vars, args, returnValue, returnValueTypeName);
 		}
 		return records;
 	}
@@ -200,6 +205,17 @@ public class CDIEventListener implements ICDIEventListener{
 			e.printStackTrace();
 		}
 		return valuestring;
+	}
+	
+	public static String getValueTypeName(ICDIValue value){
+		String valueTypeName = "";
+		if (value == null){return valueTypeName;}
+		try {
+			valueTypeName = value.getTypeName();
+		} catch (CDIException e) {
+			e.printStackTrace();
+		}
+		return valueTypeName;
 	}
 	
 	public static ICDIVariable[] getLocalVariablesFromValue(ICDIValue value){
