@@ -11,10 +11,10 @@ public class VarDescription {
 	
 	public VarDescription(String address, String type, String value, String name) {
 		super();
-		this.address = address;
-		this.type = type;
-		this.value = value;
-		this.name = name;
+		this.address = address.replace("<", "&lt;").replace("&", "&amp;");
+		this.type = type.replace("<", "&lt;").replace("&", "&amp;");
+		this.value = value.replace("<", "&lt;").replace("&", "&amp;");
+		this.name = name.replace("<", "&lt;").replace("&", "&amp;");
 		this.nested = new ArrayList<>();
 	}
 	
@@ -23,25 +23,25 @@ public class VarDescription {
 		return address;
 	}
 	public void setAddress(String address) {
-		this.address = address;
+		this.address = filter(address);
 	}
 	public String getType() {
 		return type;
 	}
 	public void setType(String type) {
-		this.type = type;
+		this.type = filter(type);
 	}
 	public String getValue() {
 		return value;
 	}
 	public void setValue(String value) {
-		this.value = value;
+		this.value = filter(value);
 	}
 	public String getName() {
 		return name;
 	}
 	public void setName(String name) {
-		this.name = name;
+		this.name = filter(name);
 	}
 	
 	public void addNested(VarDescription descr) {
@@ -49,7 +49,12 @@ public class VarDescription {
 	}
 	
 	public VarDescription[] getNested() {
-		return (VarDescription[]) this.nested.toArray();
+		VarDescription[] ret = new VarDescription[this.nested.size()];
+		this.nested.toArray(ret);
+		return ret;
 	}
 	
+	private String filter(String val) {
+		return val.replace("&", "&amp;").replace("<", "&lt;");
+	}
 }

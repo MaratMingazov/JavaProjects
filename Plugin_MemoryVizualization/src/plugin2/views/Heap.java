@@ -128,14 +128,14 @@ public class Heap extends ViewPart{
 			//subItem = new TreeItem(item, SWT.LEFT);
 			//subItem.setText(0, "InstructionPointer : " + registerInstructionPointerString);			
 			
-			ICDIValue registerBasePointer = CDIEventListener.findRegisterValueByQualifiedName(frame, "$rbp");
+			ICDIValue registerBasePointer = CDIEventListener.findRegisterValueByQualifiedName(frame, "$ebp");
 			String registerBasePointerString = CDIEventListener.getValueString(registerBasePointer);		
 			//subItem = new TreeItem(item, SWT.LEFT);
 			//subItem.setText(0, "BasePointer : " + registerBasePointerString);	
 	
 			
 			
-			ICDIValue registerStackPointer = CDIEventListener.findRegisterValueByQualifiedName(frame, "$rsp");
+			ICDIValue registerStackPointer = CDIEventListener.findRegisterValueByQualifiedName(frame, "$esp");
 			String registerStackPointerString = CDIEventListener.getValueString(registerStackPointer);		
 		
 			ArrayList<ICDIVariable> varlist = new ArrayList<ICDIVariable>();
