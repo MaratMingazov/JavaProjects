@@ -105,8 +105,17 @@ public class CDIEventListener implements ICDIEventListener{
 			String filename = frames[i].getLocator().getFile();
 			ICDIValue registerBasePointer = CDIEventListener.findRegisterValueByQualifiedName(frames[i], "$rbp");
 			String startaddress = CDIEventListener.getValueString(registerBasePointer);
+			if (startaddress.length() == 0) {
+				registerBasePointer = CDIEventListener.findRegisterValueByQualifiedName(frames[i], "$ebp");
+				startaddress = CDIEventListener.getValueString(registerBasePointer);
+			}
+			
 			ICDIValue registerStackPointer = CDIEventListener.findRegisterValueByQualifiedName(frames[i], "$rsp");
 			String endaddress = CDIEventListener.getValueString(registerStackPointer);
+			if (endaddress.length() == 0) {
+				registerStackPointer = CDIEventListener.findRegisterValueByQualifiedName(frames[i], "$esp");
+				endaddress = CDIEventListener.getValueString(registerStackPointer);
+			}
 
 			
 			records[i] = new ActivationRecord(functionname,filename,startaddress,endaddress,vars, args);
