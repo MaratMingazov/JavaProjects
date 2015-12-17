@@ -11,10 +11,10 @@ public class VarDescription {
 	
 	public VarDescription(String address, String type, String value, String name) {
 		super();
-		this.address = address.replace("<", "&lt;").replace("&", "&amp;");
-		this.type = type.replace("<", "&lt;").replace("&", "&amp;");
-		this.value = value.replace("<", "&lt;").replace("&", "&amp;");
-		this.name = name.replace("<", "&lt;").replace("&", "&amp;");
+		this.address = filter(address);
+		this.type = filter(type);
+		this.value = filter(value);
+		this.name = filter(name);
 		this.nested = new ArrayList<>();
 	}
 	
@@ -56,5 +56,6 @@ public class VarDescription {
 	
 	private String filter(String val) {
 		return val.replace("&", "&amp;").replace("<", "&lt;");
+		//return val;
 	}
 }
