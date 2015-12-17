@@ -65,48 +65,48 @@ public class CDIEventListener implements ICDIEventListener{
 	}
 	
 	public ActivationRecord[] getActivationRecords() {
+		
+		/*VarDescription v1 = new VarDescription("address1", "type1", "value1", "name1");
+		VarDescription v2 = new VarDescription("address2", "type2", "value2", "name2");
+		VarDescription[] vars = {v1,v2};
+		ActivationRecord a1 = new ActivationRecord("functionName1", "fileName1", "startAddress1", "endAddress1", vars);
+		ActivationRecord a2 = new ActivationRecord("functionName2", "fileName2", "startAddress2", "endAddress2", vars);
+		ActivationRecord[] r = {a1,a2};
+		setItIsUpdatedThread(false);
+		return r;*/
+		
 		ICDIStackFrame[] frames = CDIEventListener.getStackFrames(getCurrentThread());
 		ActivationRecord[] records = new ActivationRecord[frames.length];
+		System.out.println("recordslength = " + records.length);
 
 		for (int i = 0; i < frames.length; i++) {
+			System.out.println("i = " + i);
 			
-			ICDILocalVariableDescriptor[] descriptors =
-					CDIEventListener.GetStackFrameLocalVariableDescriptors(frames[i]);
-			VarDescription[] vars = new VarDescription[descriptors.length + 1];//extra space for return value
+			ICDILocalVariableDescriptor[] descriptors = CDIEventListener.GetStackFrameLocalVariableDescriptors(frames[i]);
+			VarDescription[] vars = new VarDescription[descriptors.length];//extra space for return value
+			System.out.println("varslenght = " + vars.length);
 			for (int k = 0; k < descriptors.length; k++) {
+				System.out.println("k = " + k);
+				ICDILocalVariable icdilovalvariable =  CDIEventListener.getLocalVariable(descriptors[k]);
+				String hexaddress = CDIEventListener.getHexAddress((Variable)icdilovalvariable);
+				String typename = CDIEventListener.getLocalVariableTypeName(icdilovalvariable);
+				ICDIValue icdvalue = CDIEventListener.getLocalVariableValue(icdilovalvariable);
+				String valuestring = CDIEventListener.getValueString(icdvalue);
+				String qualifiedname = CDIEventListener.getQualifiedName(icdilovalvariable);
 				
-				vars[k] = new VarDescription(
-						CDIEventListener.getHexAddress(
-								(Variable) CDIEventListener.getLocalVariable(descriptors[k])),
-						CDIEventListener.getLocalVariableTypeName(
-								CDIEventListener.getLocalVariable(descriptors[k])),
-						CDIEventListener.getValueString(CDIEventListener.getLocalVariableValue(
-										CDIEventListener.getLocalVariable(descriptors[k]))),
-						CDIEventListener.getQualifiedName(
-								CDIEventListener.getLocalVariable(descriptors[k]))
-				);
+				vars[k] = new VarDescription(hexaddress, typename, valuestring, qualifiedname);
 			}
 			
-			ICDIValue retVal = CDIEventListener.findRegisterValueByQualifiedName(frames[i], "$eax");
+
+			String functionname = frames[i].getLocator().getFunction();
+			String filename = frames[i].getLocator().getFile();
+			ICDIValue registerBasePointer = CDIEventListener.findRegisterValueByQualifiedName(frames[i], "$rbp");
+			String startaddress = CDIEventListener.getValueString(registerBasePointer);
+			ICDIValue registerStackPointer = CDIEventListener.findRegisterValueByQualifiedName(frames[i], "$rsp");
+			String endaddress = CDIEventListener.getValueString(registerStackPointer);
+
 			
-			VarDescription returnValue = new VarDescription(
-					CDIEventListener.getHexAddress((Variable) retVal),
-					CDIEventListener.getLocalVariableTypeName((Variable) retVal),
-					CDIEventListener.getValueString(retVal),
-					CDIEventListener.getQualifiedName((Variable) retVal)
-			);
-			vars[vars.length - 1] = returnValue;
-			
-			records[i] = new ActivationRecord(
-					
-					frames[i].getLocator().getFunction(),
-					frames[i].getLocator().getFile(),
-					CDIEventListener.getValueString(
-							CDIEventListener.findRegisterValueByQualifiedName(frames[i], "$rbp")),
-					CDIEventListener.getValueString(
-							CDIEventListener.findRegisterValueByQualifiedName(frames[i], "$rsp")),
-					vars
-			);
+			records[i] = new ActivationRecord(functionname,filename,startaddress,endaddress,vars);
 		}
 		return records;
 	}
