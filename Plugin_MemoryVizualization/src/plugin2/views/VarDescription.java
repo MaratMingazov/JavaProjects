@@ -1,10 +1,13 @@
 package plugin2.views;
 
+import java.util.ArrayList;
+
 public class VarDescription {
 	private String address;
 	private String type;
 	private String value;
 	private String name;
+	private ArrayList<VarDescription> nested;
 	
 	public VarDescription(String address, String type, String value, String name) {
 		super();
@@ -12,6 +15,7 @@ public class VarDescription {
 		this.type = type;
 		this.value = value;
 		this.name = name;
+		this.nested = new ArrayList<>();
 	}
 	
 	// getters and setters
@@ -40,5 +44,12 @@ public class VarDescription {
 		this.name = name;
 	}
 	
+	public void addNested(VarDescription descr) {
+		this.nested.add(descr);
+	}
+	
+	public VarDescription[] getNested() {
+		return (VarDescription[]) this.nested.toArray();
+	}
 	
 }
