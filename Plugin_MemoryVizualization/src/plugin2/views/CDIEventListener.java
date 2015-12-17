@@ -82,11 +82,11 @@ public class CDIEventListener implements ICDIEventListener{
 				ICDILocalVariable icdilovalvariable =  CDIEventListener.getLocalVariable(variabledescriptors[k]);
 				String hexaddress = CDIEventListener.getHexAddress((Variable)icdilovalvariable);
 				String typename = CDIEventListener.getLocalVariableTypeName(icdilovalvariable);
-				ICDIValue icdvalue = CDIEventListener.getLocalVariableValue(icdilovalvariable);
-				String valuestring = CDIEventListener.getValueString(icdvalue);
+				ICDIValue cdivalue = CDIEventListener.getLocalVariableValue(icdilovalvariable);
+				String valuestring = CDIEventListener.getValueString(cdivalue);
 				String qualifiedname = CDIEventListener.getQualifiedName(icdilovalvariable);
-				
-				vars[k] = new VarDescription(hexaddress, typename, valuestring, qualifiedname);
+				vars[k] = new VarDescription(hexaddress, typename, valuestring, qualifiedname);	
+				fillVarDescriptors(vars[k], cdivalue);
 			}
 			
 			ICDIArgumentDescriptor[] argumentdescriptors = CDIEventListener.getStackFrameArgumentDescriptors(frames[i]);
@@ -131,6 +131,25 @@ public class CDIEventListener implements ICDIEventListener{
 		setItIsUpdatedThread(false);
 		return records;
 	}
+	
+	private void fillVarDescriptors(VarDescription var, ICDIValue cdivalue){
+		ICDIVariable[] subvariables =  CDIEventListener.getLocalVariablesFromValue(cdivalue);
+		if (subvariables == null){return;}
+		
+		VarDescription[] subvars = new VarDescription[subvariables.length];//extra space for return value
+		for (int k = 0; k < subvariables.length; k++) {
+			ICDIVariable icdilovalvariable =  subvariables[k];
+			String hexaddress = CDIEventListener.getHexAddress((Variable)icdilovalvariable);
+			String typename = CDIEventListener.getLocalVariableTypeName(icdilovalvariable);
+			ICDIValue subcdivalue = CDIEventListener.getLocalVariableValue(icdilovalvariable);
+			String valuestring = CDIEventListener.getValueString(subcdivalue);
+			String qualifiedname = CDIEventListener.getQualifiedName(icdilovalvariable);
+			subvars[k] = new VarDescription(hexaddress, typename, valuestring, qualifiedname);	
+			fillVarDescriptors(subvars[k], subcdivalue);
+			var.addNested(subvars[k]);		
+		}		
+	}
+	
 	
 	public String getEaxValue(){
 		return EAXvalue;
