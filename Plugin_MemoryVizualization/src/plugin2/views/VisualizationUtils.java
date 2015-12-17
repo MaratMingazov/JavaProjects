@@ -6,16 +6,17 @@ public class VisualizationUtils {
 
 	// Template's params list: function, file, start address, args, rows, end
 	// address, return value type, return value
-	private static String activationRecordTemplate = "<div class=\"ar\"><div class=\"ar_title\">Activation Record</div><table class=\"ar_info\"> <tr> <td class=\"n\">Function</td><td class=\"v\">%s</td></tr><tr> <td class=\"n\">File</td><td class=\"v\">%s</td></tr><tr> <td colspan=\"2\"> <table class=\"ar_vars\"> <thead> <tr class=\"title\"> <td>Address</td><td>Type</td><td>Value</td><td>Name</td></tr></thead> <tbody> <tr> <td>%s</td><td colspan=\"3\" class=\"gr\">start address</td></tr>%s %s<tr> <td>%s</td><td colspan=\"3\" class=\"gr\">end address</td></tr></tbody> </table> </td></tr><tr> <td class=\"n\">Return value:</td><td class=\"v\">(%s) %s</td></tr></table></div>";
+	private static String activationRecordTemplate = "<div class=\"ar\"><div class=\"ar_title\">Activation Record</div><table class=\"ar_info\"> <tr> <td class=\"n\">Function</td><td class=\"v\">%s</td></tr><tr> <td class=\"n\">File</td><td class=\"v\">%s</td></tr><tr> <td colspan=\"2\"> <table class=\"ar_vars\"> <thead> <tr class=\"title\"> <td>Address</td><td>Type</td><td>Value</td><td>Name</td></tr></thead> <tbody> <tr> <td>%s</td><td colspan=\"3\" class=\"gr\">start address</td></tr>%s %s<tr> <td>%s</td><td colspan=\"3\" class=\"gr\">end address</td></tr></tbody> </table> </td></tr></table></div>";
 
 	// Template's params list: addr, type, value, name
 	private static String varsRowTemplate = "<tr> <td class=\"c_addr\">%s</td><td class=\"c_type\">%s</td><td class=\"c_value\">%s</td><td class=\"c_name\">%s</td></tr>";
 	private static String argsRowTemplate = "<tr> <td class=\"c_addr arg\">%s</td><td class=\"c_type arg\">%s</td><td class=\"c_value arg\">%s</td><td class=\"c_name arg\">%s</td></tr>";
 
-	public static String composeStackTab(ActivationRecord[] frames) {
+	public static String composeStackTab(ActivationRecord[] frames, String eaxType, String eaxValue) {
 		StringBuilder html = new StringBuilder();
 
 		html.append(htmlHeader);
+		html.append(String.format("<div class=\"ar\">EAX: (%s) %s</div>", eaxType, eaxValue));
 		if (frames != null) {
 			for (ActivationRecord frame : frames) {
 
@@ -39,7 +40,7 @@ public class VisualizationUtils {
 
 				String activationRecord = String.format(activationRecordTemplate, frame.getFunctionName(),
 						frame.getFileName(), frame.getStartAddress(), args.toString(), rows.toString(),
-						frame.getEndAddress(), frame.getReturnValueType(), frame.getReturnValue());
+						frame.getEndAddress());
 
 				html.append(activationRecord);
 			}

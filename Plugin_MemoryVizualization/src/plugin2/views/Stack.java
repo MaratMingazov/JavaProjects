@@ -93,7 +93,11 @@ public class Stack extends ViewPart {
 		if (!cdiEventListener.isItUpdatedThread()){return;}
 		
 		
-		String tabContent = VisualizationUtils.composeStackTab(cdiEventListener.getActivationRecords());
+		String tabContent = VisualizationUtils.composeStackTab(
+				cdiEventListener.getActivationRecords(),
+				cdiEventListener.getEaxType(),
+				cdiEventListener.getEaxValue()
+				);
 		
 		browser.setText(tabContent);
 		
