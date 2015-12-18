@@ -158,11 +158,11 @@ String curLineNumber = String.valueOf(frames[i].getLocator().getLineNumber());
 			VarDescription addedVar = new VarDescription(hexaddress, typename, valuestring, qualifiedname);
 			if (hexaddress.compareTo(endaddress) >=0  && hexaddress.compareTo(startaddress) <=0 ) {
 				tempSubvars.add(addedVar);
+				var.addNested(addedVar);
 			} else {
 				heapVars.add(addedVar);
 			}
 			fillVarDescriptors(addedVar, subcdivalue, startaddress, endaddress);
-			var.addNested(addedVar);	
 		}
 		VarDescription[] subvars = new VarDescription[tempSubvars.size()];//extra space for return value
 		tempSubvars.toArray(subvars);
