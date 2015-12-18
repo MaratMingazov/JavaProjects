@@ -128,15 +128,21 @@ public class Heap extends ViewPart{
 			//subItem = new TreeItem(item, SWT.LEFT);
 			//subItem.setText(0, "InstructionPointer : " + registerInstructionPointerString);			
 			
-			ICDIValue registerBasePointer = CDIEventListener.findRegisterValueByQualifiedName(frame, "$ebp");
-			String registerBasePointerString = CDIEventListener.getValueString(registerBasePointer);		
+			ICDIValue registerBasePointer = CDIEventListener.findRegisterValueByQualifiedName(frame, "$rbp");
+			String registerBasePointerString = CDIEventListener.getValueString(registerBasePointer);	
+			if (registerBasePointerString.length() == 0) {
+				registerBasePointer = CDIEventListener.findRegisterValueByQualifiedName(frame, "$ebp");
+				registerBasePointerString = CDIEventListener.getValueString(registerBasePointer);	
+			}
 			//subItem = new TreeItem(item, SWT.LEFT);
 			//subItem.setText(0, "BasePointer : " + registerBasePointerString);	
 	
-			
-			
-			ICDIValue registerStackPointer = CDIEventListener.findRegisterValueByQualifiedName(frame, "$esp");
-			String registerStackPointerString = CDIEventListener.getValueString(registerStackPointer);		
+			ICDIValue registerStackPointer = CDIEventListener.findRegisterValueByQualifiedName(frame, "$rsp");
+			String registerStackPointerString = CDIEventListener.getValueString(registerStackPointer);
+			if (registerStackPointerString.length() == 0) {
+				registerStackPointer = CDIEventListener.findRegisterValueByQualifiedName(frame, "$esp");
+				registerStackPointerString = CDIEventListener.getValueString(registerStackPointer);
+			}
 		
 			ArrayList<ICDIVariable> varlist = new ArrayList<ICDIVariable>();
 			ICDILocalVariableDescriptor[] descriptors = CDIEventListener.GetStackFrameLocalVariableDescriptors(frame);
