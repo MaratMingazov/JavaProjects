@@ -38,7 +38,7 @@ public class VisualizationUtils {
 		StringBuilder html = new StringBuilder();
 
 		html.append(htmlHeader);
-		html.append(String.format("<div class=\"ar\" id=\"ff\">EAX: (%s) %s</div>", eaxType, eaxValue));
+		html.append(String.format("<div class=\"ar\" id=\"ff\">EAX: (%s) %s<br>Program Counter: %s</div>", eaxType, eaxValue, getCurrentLineNumber(frames)));
 		if (frames != null) {
 			for (ActivationRecord frame : frames) {
 
@@ -56,6 +56,13 @@ public class VisualizationUtils {
 		html.append(htmlFooter);
 
 		return html.toString();
+	}
+	
+	private static String getCurrentLineNumber(ActivationRecord[] recs) {
+		if (recs != null && recs.length > 0) {
+			return recs[0].getLineNumber();
+		}
+		return "Unknown";
 	}
 	
 	private static String composeVarsTable(VarDescription[] args, VarDescription[] vars, boolean firstTime) {
