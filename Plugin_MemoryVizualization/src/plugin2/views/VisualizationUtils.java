@@ -1,6 +1,5 @@
 package plugin2.views;
 
-import static plugin2.Reversed.reversed;
 
 import java.util.Arrays;
 

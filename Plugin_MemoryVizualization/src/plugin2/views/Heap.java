@@ -5,19 +5,8 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
 import org.eclipse.swt.widgets.TreeItem;
-import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.ui.part.ViewPart;
-import com.sun.jdi.Field;
-import com.sun.jdi.Method;
-import com.sun.jdi.ObjectReference;
-import com.sun.jdi.ReferenceType;
-import com.sun.jdi.VirtualMachine;
-import com.sun.jdi.Value;
 import java.util.ArrayList;
-import java.util.List;
-
-import org.eclipse.cdt.debug.core.cdi.CDIException;
-import org.eclipse.cdt.debug.core.cdi.model.ICDIExpression;
 import org.eclipse.cdt.debug.core.cdi.model.ICDILocalVariableDescriptor;
 import org.eclipse.cdt.debug.core.cdi.model.ICDIStackFrame;
 import org.eclipse.cdt.debug.core.cdi.model.ICDIThread;
@@ -25,9 +14,6 @@ import org.eclipse.cdt.debug.core.cdi.model.ICDIValue;
 import org.eclipse.cdt.debug.core.cdi.model.ICDIVariable;
 import org.eclipse.cdt.debug.mi.core.cdi.Session;
 import org.eclipse.cdt.debug.mi.core.cdi.model.Variable;
-import org.eclipse.debug.core.DebugPlugin;
-import org.eclipse.debug.core.model.IStackFrame;
-import org.eclipse.jdt.debug.core.IJavaThread;
 import org.eclipse.swt.SWT;
 
 
