@@ -159,6 +159,11 @@ public class CDIEventListener implements ICDIEventListener{
 		return EAXvaluetype;
 	}
 	
+	public String getProgramCounter() {
+		//TODO implement
+		return null;
+	}
+	
 	public static ICDIStackFrame[] getStackFrames(ICDIThread thread){
 		if (thread == null){return null;}
 		ICDIStackFrame[] Frames = new ICDIStackFrame[0];
