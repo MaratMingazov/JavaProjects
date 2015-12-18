@@ -1,12 +1,16 @@
 package plugin2.views;
 
+import static plugin2.Reversed.reversed;
+
+import java.util.Arrays;
+
 public class VisualizationUtils {
 	private static String htmlHeader = "<html><head><title>Stack</title><style type=\"text/css\">body{background-color: white;}*{font-family: monospace; font-size:10pt;}div.ar{background-color: #FDF1FA; padding: 6px; margin-bottom: 12px; border: 1px solid #bbb;}div.ar_title{font-size: small; color: #669999;}.ar_info, .ar_info td{border: 1px solid #FDF1FA; border-collapse: collapse; padding: 4px;}.ar_vars, .ar_vars td{border: 1px solid #ccc; border-collapse: collapse; padding: 6px;}.ar_info .n, .ar_vars .title td{font-size: 10pt; color: #669999;}.ar_info{font-size: small; border-color: #FDF1FA;}.gr{color: grey; font-size: 8pt;} td.arg { background-color: #d9ffb3; } .collapsibleList li > input + *{display: none;}.collapsibleList li > input:checked + *{display: block;}.collapsibleList{list-style-type: none;}.collapsibleList li > input{display: none;}.collapsibleList label{cursor: pointer; text-decoration: underline;}</style></head><body>";
 	private static String htmlFooter = "</body></html>";
 
-	// Template's params list: function, file, start address, args, rows, end
+	// Template's params list: function, file, end address, args, rows, start address
 	// address, return value type, return value
-	private static String activationRecordTemplate = "<div class=\"ar collapsibleList\"><div class=\"ar_title\">Activation Record</div><table class=\"ar_info\"> <tr> <td class=\"n\">Function</td><td class=\"v\">%s</td></tr><tr> <td class=\"n\">File</td><td class=\"v\">%s</td></tr><tr> <td colspan=\"2\"> <table class=\"ar_vars\"> <thead> <tr class=\"title\"> <td>Address</td><td>Type</td><td>Value</td><td>Name</td></tr></thead> <tbody> <tr> <td>%s</td><td colspan=\"3\" class=\"gr\">start address</td></tr>%s<tr> <td>%s</td><td colspan=\"3\" class=\"gr\">end address</td></tr></tbody> </table> </td></tr></table></div>";
+	private static String activationRecordTemplate = "<div class=\"ar collapsibleList\"><div class=\"ar_title\">Activation Record</div><table class=\"ar_info\"> <tr> <td class=\"n\">Function</td><td class=\"v\">%s</td></tr><tr> <td class=\"n\">File</td><td class=\"v\">%s</td></tr><tr> <td colspan=\"2\"> <table class=\"ar_vars\"> <thead> <tr class=\"title\"> <td>Address</td><td>Type</td><td>Value</td><td>Name</td></tr></thead> <tbody> <tr> <td>%s</td><td colspan=\"3\" class=\"gr\">end address</td></tr>%s<tr> <td>%s</td><td colspan=\"3\" class=\"gr\">start address</td></tr></tbody> </table> </td></tr></table></div>";
 
 	// Template's params list: addr, type, value, name
 	private static String varsRowTemplate = "<tr> <td class=\"c_addr\">%s</td><td class=\"c_type\">%s</td><td class=\"c_value\">%s</td><td class=\"c_name\">%s</td></tr>";
@@ -44,8 +48,8 @@ public class VisualizationUtils {
 				String varsTable = composeVarsTable(frame.getArgs(), frame.getVars(), true);
 
 				String activationRecord = String.format(activationRecordTemplate, frame.getFunctionName(),
-						frame.getFileName(), frame.getStartAddress(), varsTable,
-						frame.getEndAddress());
+						frame.getFileName(), frame.getEndAddress(), varsTable,
+						frame.getStartAddress());
 
 				html.append(activationRecord);
 			}
@@ -63,16 +67,11 @@ public class VisualizationUtils {
 			builder.append(varsTableHeader);
 		}
 		
-		if (args != null) {
-			for (VarDescription arg : args) {
-				builder.append(
-						String.format(argsRowTemplate, arg.getAddress(), arg.getType(), arg.getValue(), arg.getName()));
-			}
-		}
+		
 
 		VarDescription[] nested;
 		if (vars != null) {
-			for (VarDescription var : vars) {
+			for (VarDescription var : reversed(Arrays.asList(vars))) {
 				if ((nested = var.getNested()) != null && nested.length > 0) {
 					builder.append(String.format(varsRowWithNestedTemplate, var.getAddress(), var.getType(),
 							getUniqueId(true), var.getValue(), var.getName()));
@@ -85,6 +84,13 @@ public class VisualizationUtils {
 					builder.append(String.format(varsRowTemplate, var.getAddress(), var.getType(), var.getValue(),
 							var.getName()));
 				}
+			}
+		}
+		
+		if (args != null) {
+			for (VarDescription arg : reversed(Arrays.asList(args))) {
+				builder.append(
+						String.format(argsRowTemplate, arg.getAddress(), arg.getType(), arg.getValue(), arg.getName()));
 			}
 		}
 
