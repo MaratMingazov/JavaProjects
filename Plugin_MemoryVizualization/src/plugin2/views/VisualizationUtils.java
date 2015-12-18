@@ -10,7 +10,7 @@ public class VisualizationUtils {
 
 	// Template's params list: function, file, end address, args, rows, start address
 	// address, return value type, return value
-	private static String activationRecordTemplate = "<div class=\"ar collapsibleList\"><div class=\"ar_title\">Activation Record</div><table class=\"ar_info\"> <tr> <td class=\"n\">Function</td><td class=\"v\">%s</td></tr><tr> <td class=\"n\">File</td><td class=\"v\">%s</td></tr><tr> <td colspan=\"2\"> <table class=\"ar_vars\"> <thead> <tr class=\"title\"> <td>Address</td><td>Type</td><td>Value</td><td>Name</td></tr></thead> <tbody> <tr> <td>%s</td><td colspan=\"3\" class=\"gr\">end address</td></tr>%s<tr> <td>%s</td><td colspan=\"3\" class=\"gr\">start address</td></tr></tbody> </table> </td></tr></table></div>";
+	private static String activationRecordTemplate = "<div class=\"ar collapsibleList\"><div class=\"ar_title\">Activation Record</div><table class=\"ar_info\"> <tr> <td class=\"n\">Function</td><td class=\"v\">%s</td></tr><tr> <td class=\"n\">File</td><td class=\"v\">%s</td></tr><tr> <td colspan=\"2\"> <table class=\"ar_vars\"> <thead> <tr class=\"title\"> <td>Address</td><td>Type</td><td>Value</td><td>Name</td></tr></thead> <tbody> <tr> <td>%s</td><td colspan=\"3\" class=\"gr\">end address</td></tr>%s</tbody> </table> </td></tr></table></div>";
 
 	// Template's params list: addr, type, value, name
 	private static String varsRowTemplate = "<tr> <td class=\"c_addr\">%s</td><td class=\"c_type\">%s</td><td class=\"c_value\">%s</td><td class=\"c_name\">%s</td></tr>";
@@ -45,11 +45,10 @@ public class VisualizationUtils {
 
 				StringBuilder args = new StringBuilder();
 
-				String varsTable = composeVarsTable(frame.getArgs(), frame.getVars(), true);
+				String varsTable = String.format(composeVarsTable(frame.getArgs(), frame.getVars(), true), frame.getStartAddress());
 
 				String activationRecord = String.format(activationRecordTemplate, frame.getFunctionName(),
-						frame.getFileName(), frame.getEndAddress(), varsTable,
-						frame.getStartAddress());
+						frame.getFileName(), frame.getEndAddress(), varsTable);
 
 				html.append(activationRecord);
 			}
@@ -71,7 +70,8 @@ public class VisualizationUtils {
 
 		VarDescription[] nested;
 		if (vars != null) {
-			for (VarDescription var : reversed(Arrays.asList(vars))) {
+			Arrays.sort(vars);
+			for (VarDescription var : vars) {
 				if ((nested = var.getNested()) != null && nested.length > 0) {
 					builder.append(String.format(varsRowWithNestedTemplate, var.getAddress(), var.getType(),
 							getUniqueId(true), var.getValue(), var.getName()));
@@ -87,8 +87,13 @@ public class VisualizationUtils {
 			}
 		}
 		
+		if (firstTime) {
+			builder.append("<tr><td>%s</td><td colspan=\"3\" class=\"gr\">start address</td></tr>");
+		}
+		
 		if (args != null) {
-			for (VarDescription arg : reversed(Arrays.asList(args))) {
+			Arrays.sort(args);
+			for (VarDescription arg : args) {
 				builder.append(
 						String.format(argsRowTemplate, arg.getAddress(), arg.getType(), arg.getValue(), arg.getName()));
 			}

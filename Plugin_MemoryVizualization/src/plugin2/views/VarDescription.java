@@ -2,7 +2,7 @@ package plugin2.views;
 
 import java.util.ArrayList;
 
-public class VarDescription {
+public class VarDescription implements Comparable<VarDescription> {
 	private String address;
 	private String type;
 	private String value;
@@ -58,4 +58,9 @@ public class VarDescription {
 		return val.replace("&", "&amp;").replace("<", "&lt;");
 		//return val;
 	}
+	
+	@Override
+	 public int compareTo(VarDescription other) {
+		return this.address.compareTo(other.getAddress()); 
+	 }
 }
