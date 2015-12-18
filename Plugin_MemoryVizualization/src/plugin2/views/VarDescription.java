@@ -61,6 +61,8 @@ public class VarDescription implements Comparable<VarDescription> {
 	
 	@Override
 	 public int compareTo(VarDescription other) {
+		if (other == null) 
+			return 0;
 		return this.address.compareTo(other.getAddress()); 
 	 }
 }
