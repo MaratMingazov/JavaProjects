@@ -1,6 +1,7 @@
 package plugin2.views;
 
 public class ActivationRecord {
+	private String lineNumber;
 	private String functionName;
 	private String fileName;
 	private String startAddress;
@@ -9,9 +10,10 @@ public class ActivationRecord {
 	private VarDescription[] args;
 
 
-	public ActivationRecord(String functionName, String fileName, String startAddress, String endAddress,
+	public ActivationRecord(String lineNumber, String functionName, String fileName, String startAddress, String endAddress,
 			VarDescription[] vars, VarDescription[] args) {
 		super();
+		this.lineNumber = lineNumber;
 		this.functionName = functionName;
 		this.fileName = fileName;
 		this.startAddress = startAddress;
@@ -57,6 +59,11 @@ public class ActivationRecord {
 	public void setArgs(VarDescription[] args) {
 		this.args = args;
 	}
-	
+	public String getLineNumber() {
+		return lineNumber;
+	}
+	public void setLineNumber(String lineNumber) {
+		this.lineNumber = lineNumber;
+	}
 	
 }

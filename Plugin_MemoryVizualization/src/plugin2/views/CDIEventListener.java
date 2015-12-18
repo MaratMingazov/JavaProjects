@@ -124,9 +124,9 @@ public class CDIEventListener implements ICDIEventListener{
 			EAXvalue = CDIEventListener.getValueString(registerReturnValue);	
 			EAXvaluetype = CDIEventListener.getValueTypeName(registerReturnValue);	
 			
-
+String curLineNumber = String.valueOf(frames[i].getLocator().getLineNumber());
 			
-			records[i] = new ActivationRecord(functionname,filename,startaddress,endaddress,vars, args);
+			records[i] = new ActivationRecord(curLineNumber, functionname,filename,startaddress,endaddress,vars, args);
 		}
 		setItIsUpdatedThread(false);
 		return records;
