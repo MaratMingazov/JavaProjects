@@ -76,6 +76,8 @@ public class CDIEventListener implements ICDIEventListener{
 	
 	public ActivationRecord[] getActivationRecords() {
 		
+		heapVars = new ArrayList<>();
+		
 		ICDIStackFrame[] frames = CDIEventListener.getStackFrames(getCurrentThread());
 		ActivationRecord[] records = new ActivationRecord[frames.length];
 
