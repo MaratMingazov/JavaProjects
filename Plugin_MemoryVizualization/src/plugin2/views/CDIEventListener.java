@@ -33,6 +33,12 @@ public class CDIEventListener implements ICDIEventListener{
 	
 	List<VarDescription> heapVars = new ArrayList<>();
 	
+	public VarDescription[] getHeapVars() {
+		VarDescription[] arr = new VarDescription[heapVars.size()];
+		heapVars.toArray(arr);
+		return arr;
+	}
+	
 	public void handleDebugEvents(ICDIEvent[] event) {
 		//System.out.println("");
 		for (ICDIEvent ev : event){

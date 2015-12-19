@@ -38,7 +38,7 @@ public class Stack extends ViewPart {
 	    Thread2.start();
 		
 		browser = new Browser(parent, SWT.NONE);
-		browser.setText("<html><body>Here will appear stack-related debug information</body></html>");
+		browser.setText("<html><body>Here will appear stack- and heap-related debug information</body></html>");
 	}	
 
 	@Override
@@ -63,7 +63,8 @@ public class Stack extends ViewPart {
 		String tabContent = VisualizationUtils.composeStackTab(
 				cdiEventListener.getActivationRecords(),
 				cdiEventListener.getEaxType(),
-				cdiEventListener.getEaxValue()
+				cdiEventListener.getEaxValue(),
+				cdiEventListener.getHeapVars()
 				);
 		
 		browser.setText(tabContent);
