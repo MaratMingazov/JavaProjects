@@ -6,11 +6,12 @@ public class ActivationRecord {
 	private String fileName;
 	private String startAddress;
 	private String endAddress;
+	private String staticLink;
 	private VarDescription[] vars;
 	private VarDescription[] args;
 
 
-	public ActivationRecord(String lineNumber, String functionName, String fileName, String startAddress, String endAddress,
+	public ActivationRecord(String lineNumber, String functionName, String fileName, String startAddress, String endAddress, String staticLink, 
 			VarDescription[] vars, VarDescription[] args) {
 		super();
 		this.lineNumber = lineNumber;
@@ -18,6 +19,7 @@ public class ActivationRecord {
 		this.fileName = fileName;
 		this.startAddress = startAddress;
 		this.endAddress = endAddress;
+		this.staticLink = staticLink;
 		this.vars = vars;
 		this.args = args;
 	}
@@ -65,5 +67,10 @@ public class ActivationRecord {
 	public void setLineNumber(String lineNumber) {
 		this.lineNumber = lineNumber;
 	}
-	
+	public String getStaticLink() {
+		return staticLink;
+	}
+	public void setStaticLink(String staticLink) {
+		this.staticLink = staticLink;
+	}
 }

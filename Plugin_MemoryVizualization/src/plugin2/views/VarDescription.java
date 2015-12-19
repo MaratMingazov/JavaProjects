@@ -38,7 +38,7 @@ public class VarDescription implements Comparable<VarDescription> {
 		this.value = filter(value);
 	}
 	public String getName() {
-		return name;
+		return name.replace("xyz", " :-( "); //inno easter egg
 	}
 	public void setName(String name) {
 		this.name = filter(name);

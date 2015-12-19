@@ -145,7 +145,7 @@ public class CDIEventListener implements ICDIEventListener{
 			
 String curLineNumber = String.valueOf(frames[i].getLocator().getLineNumber());
 			
-			records[i] = new ActivationRecord(curLineNumber, functionname,filename,startaddress,endaddress,vars, args);
+			records[i] = new ActivationRecord(curLineNumber, functionname,filename,startaddress,endaddress, "Unknown (not implemented)",vars, args);
 		}
 		setItIsUpdatedThread(false);
 		return records;
