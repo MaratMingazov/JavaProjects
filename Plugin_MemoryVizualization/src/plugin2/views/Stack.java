@@ -2,15 +2,10 @@ package plugin2.views;
 
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.swt.browser.*;
 import org.eclipse.ui.part.*;
 import org.eclipse.swt.SWT;
-import java.util.ArrayList;
-import org.eclipse.cdt.debug.core.cdi.model.ICDIValue;
-import org.eclipse.cdt.debug.core.cdi.model.ICDIVariable;
 import org.eclipse.cdt.debug.mi.core.cdi.Session;
-import org.eclipse.cdt.debug.mi.core.cdi.model.Variable;
 
 
 public class Stack extends ViewPart {
@@ -70,7 +65,7 @@ public class Stack extends ViewPart {
 		browser.setText(tabContent);
 	}	
 	
-	private boolean isExist(ArrayList<ICDIVariable> varlist, ICDIVariable variable){
+	/*private boolean isExist(ArrayList<ICDIVariable> varlist, ICDIVariable variable){
 		Variable v = (Variable)variable;
 		String hexAddress1 = CDIEventListener.getHexAddress(v);
 		for (ICDIVariable var : varlist){
@@ -79,18 +74,18 @@ public class Stack extends ViewPart {
 			if (hexAddress1.equals(hexAddress2)){return true;}	
 		}
 		return false;
-	}
+	}*/
 	
-	private void fillVarList(ArrayList<ICDIVariable> varlist, ICDIVariable[] variables){		
+	/*private void fillVarList(ArrayList<ICDIVariable> varlist, ICDIVariable[] variables){		
 		for (ICDIVariable variable : variables){
 			if (!isExist(varlist, variable)){varlist.add(variable);}
 			ICDIValue value 			= CDIEventListener.getLocalVariableValue(variable);
 			ICDIVariable[] subvariables = CDIEventListener.getLocalVariablesFromValue(value);
 			fillVarList(varlist, subvariables);
 		}
-	}
+	}*/
 	
-	private void vizualizateCdiVariables(TreeItem item, ICDIVariable[] variables){
+	/*private void vizualizateCdiVariables(TreeItem item, ICDIVariable[] variables){
 		if (variables == null){return;}
 		for (ICDIVariable lvariable : variables){
 			Variable variable = (Variable)lvariable;	
@@ -105,6 +100,6 @@ public class Stack extends ViewPart {
 			subItem.setText(0,typename + " " + QualifiedName + " : " + valuestring + " address: " + hexAddress);
 			vizualizateCdiVariables(subItem, CDIEventListener.getLocalVariablesFromValue(value));		
 		}
-	}
+	}*/
 
 }

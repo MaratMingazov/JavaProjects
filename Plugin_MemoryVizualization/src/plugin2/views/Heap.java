@@ -1,51 +1,39 @@
 package plugin2.views;
 
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Tree;
-import org.eclipse.swt.widgets.TreeColumn;
-import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.part.ViewPart;
-import java.util.ArrayList;
-import org.eclipse.cdt.debug.core.cdi.model.ICDILocalVariableDescriptor;
-import org.eclipse.cdt.debug.core.cdi.model.ICDIStackFrame;
-import org.eclipse.cdt.debug.core.cdi.model.ICDIThread;
-import org.eclipse.cdt.debug.core.cdi.model.ICDIValue;
-import org.eclipse.cdt.debug.core.cdi.model.ICDIVariable;
-import org.eclipse.cdt.debug.mi.core.cdi.Session;
-import org.eclipse.cdt.debug.mi.core.cdi.model.Variable;
-import org.eclipse.swt.SWT;
+
 
 
 public class Heap extends ViewPart{
-	private CDIEventListener cdiEventListener = null;
-	private Session cdiDebugSession = null;
-	private Tree treeOne;
-	private Tree treeTwo;
+	//private CDIEventListener cdiEventListener = null;
+	//private Session cdiDebugSession = null;
+	//private Tree treeOne;
+	//private Tree treeTwo;
 
 	class RunnableForThread2 implements Runnable{
 		public void run() {
-			while (true) {
-				try { Thread.sleep(1000); } catch (Exception e) { }
-				Runnable task = () -> { VizualizateHeapCpp();};
-				Display.getDefault().asyncExec(task);
-			}			
+			//while (true) {
+				//try { Thread.sleep(1000); } catch (Exception e) { }
+				//Runnable task = () -> { VizualizateHeapCpp();};
+				//Display.getDefault().asyncExec(task);
+			//}			
 		}
 	}
 		
 	@Override
 	public void createPartControl(Composite parent) {
 		
-		createTreeOne(parent);
-		createTreeTwo(parent);
+		//createTreeOne(parent);
+		//createTreeTwo(parent);
 
 		
-		this.cdiEventListener		= new CDIEventListener();
-		tryGetCdiSession();
+		//this.cdiEventListener		= new CDIEventListener();
+		//tryGetCdiSession();
 		
-		Runnable runnable = new RunnableForThread2();
-		Thread Thread2 = new Thread(runnable);
-		Thread2.start();	
+		//Runnable runnable = new RunnableForThread2();
+		//Thread Thread2 = new Thread(runnable);
+		//Thread2.start();	
 	}
 
 	@Override
@@ -53,7 +41,7 @@ public class Heap extends ViewPart{
 	}
 	
 	
-	private void tryGetCdiSession(){	
+	/*private void tryGetCdiSession(){	
 		Session session = CDIDebugger.getSession();
 		if (session == null){return;}
 		if (session.equals(this.cdiDebugSession)){return;}
@@ -61,9 +49,9 @@ public class Heap extends ViewPart{
 			this.cdiDebugSession = session;
 			if (this.cdiDebugSession != null){this.cdiDebugSession.getEventManager().addEventListener(this.cdiEventListener);}	
 		}
-	}
+	}*/
 	
-	private void createTreeOne(Composite parent){
+	/*private void createTreeOne(Composite parent){
 		treeOne = new Tree(parent, SWT.MIN);
 		treeOne.setHeaderVisible(true);
 		treeOne.setLinesVisible(true);		
@@ -73,9 +61,9 @@ public class Heap extends ViewPart{
 		TreeColumn columnName = new TreeColumn(treeOne, SWT.LEFT);
 		columnName.setText("classes");
 		columnName.setWidth(300);
-	}
+	}*/
 	
-	private void createTreeTwo(Composite parent){
+	/*private void createTreeTwo(Composite parent){
 		treeTwo = new Tree(parent, SWT.H_SCROLL | SWT.V_SCROLL);
 		treeTwo.setHeaderVisible(true);
 		treeTwo.setLinesVisible(true);		
@@ -84,9 +72,9 @@ public class Heap extends ViewPart{
 		TreeColumn columnName = new TreeColumn(treeTwo, SWT.LEFT);
 		columnName.setText("instances");
 		columnName.setWidth(300);		
-	}
+	}*/
 	
-	private void VizualizateHeapCpp(){
+	/*private void VizualizateHeapCpp(){
 		tryGetCdiSession();
 		if (cdiEventListener ==null){return;}
 		if (!cdiEventListener.isItUpdatedThread()){return;}
@@ -166,16 +154,16 @@ public class Heap extends ViewPart{
 		}
 		
 
-	}	
+	}	*/
 	
-	private void fillVarList(ArrayList<ICDIVariable> varlist, ICDIVariable[] variables){		
+	/*private void fillVarList(ArrayList<ICDIVariable> varlist, ICDIVariable[] variables){		
 		for (ICDIVariable variable : variables){
 			varlist.add(variable);
 			ICDIValue value 			= CDIEventListener.getLocalVariableValue(variable);
 			ICDIVariable[] subvariables = CDIEventListener.getLocalVariablesFromValue(value);
 			fillVarList(varlist, subvariables);
 		}
-	}
+	}*/
 	
 
 }
