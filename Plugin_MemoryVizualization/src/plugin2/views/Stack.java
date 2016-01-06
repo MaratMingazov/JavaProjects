@@ -61,7 +61,6 @@ public class Stack extends ViewPart {
 				cdiEventListener.getEaxValue(),
 				cdiEventListener.getHeapVars()
 				);
-		
 		browser.setText(tabContent);
 	}	
 	
