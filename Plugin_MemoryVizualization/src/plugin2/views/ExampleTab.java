@@ -25,8 +25,7 @@ import org.eclipse.swt.widgets.Text;
 
 public class ExampleTab extends CLaunchConfigurationTab {
 
-	Text debugIDText, debugArgsText, projNameText, 
-			exeNameText, exeArgsText, platformText;
+	Text debugIDText, debugArgsText, projNameText, exeNameText, exeArgsText, platformText;
 	String platform, projName, progName;
 	
 	// Add text boxes to receive input parameters from the user 

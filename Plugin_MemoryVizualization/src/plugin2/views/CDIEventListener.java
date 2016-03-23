@@ -2,7 +2,6 @@ package plugin2.views;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.eclipse.cdt.debug.core.cdi.CDIException;
 import org.eclipse.cdt.debug.core.cdi.event.ICDIEvent;
 import org.eclipse.cdt.debug.core.cdi.event.ICDIEventListener;
@@ -40,7 +39,6 @@ public class CDIEventListener implements ICDIEventListener{
 	}
 	
 	public void handleDebugEvents(ICDIEvent[] event) {
-		//System.out.println("");
 		for (ICDIEvent ev : event){
 			ICDIObject source = ev.getSource();	
 			if (source == null){
